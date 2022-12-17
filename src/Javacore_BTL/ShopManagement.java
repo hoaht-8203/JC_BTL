@@ -1,9 +1,11 @@
 package Javacore_BTL;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class ShopManagement {
@@ -68,7 +70,7 @@ public class ShopManagement {
 			switch (choice) {
 			case 1:
 				
-				if(listP.size() <= 0) {
+				if(listC.size() <= 0) {
 					System.out.println("Danh sach danh muc rong");
 				}else {
 					danhSachDanhMuc();
@@ -162,21 +164,41 @@ public class ShopManagement {
 					System.out.println("Nhap ma danh muc ban muon xoa:");
 					while(true) {
 						try {
-							Integer idCate = Integer.parseInt(sc.nextLine());
+							int cataId = Integer.parseInt(sc.nextLine());
+							List<Categories> cateFound = new ArrayList<Categories>();
+							List<Product> proFound = new ArrayList<Product>();
 							boolean existed = false;
 							for (Categories categories : listC) {
-								if(categories.getCatalogId() == idCate) {
-									listC.remove(categories);
+								if(categories.getCatalogId() == cataId) {
+									cateFound.add(categories);
+									for (Categories categories2 : listC) {
+										if(categories2.getParentId() == cataId) {
+											cateFound.add(categories2);
+											for (Product product : listP) {
+												if(product.getCatalog() == categories2.getCatalogId()) {
+													proFound.add(product);
+												}
+											}
+										}
+									}
+									
+									for (Product product : listP) {
+										if(product.getCatalog() == cataId) {
+											proFound.add(product);
+										}
+									}
 									existed = true;
 									break;
 								}
 							}
 							
-							if(existed) {
-								System.out.println("Xoa danh muc thanh cong");
+							if(cateFound != null && existed == true) {
+								listC.removeAll(cateFound);
+								listP.removeAll(proFound);
+								System.out.println("Danh muc da duoc xoa");
 								break;
 							}else {
-								System.out.println("ID danh muc khong ton tai. Nhap lai");
+								System.out.println("Ma danh muc khong ton tai. Nhap lai:");
 							}
 						} catch (Exception e) {
 							System.out.println("Ma danh muc la mot so nguyen lon hon 0. Nhap lai:");
@@ -198,7 +220,6 @@ public class ShopManagement {
 							if(categories.getCatalogName().equalsIgnoreCase(name)) {
 								exsited = true;
 								categories.displayData();
-								break;
 							}
 						}
 						
@@ -238,7 +259,7 @@ public class ShopManagement {
 			
 			switch (choice) {
 			case 1:
-				
+				// Chi lam duoc khi so danh muc cho truoc
 				break;
 			case 2:
 				if(listC.size() <= 0) {
@@ -394,7 +415,6 @@ public class ShopManagement {
 				if(listP.size() <= 0){
 					System.out.println("Danh sach san pham rong");
 				}else {
-					boolean existeed = false;
 					System.out.println("Thong tin loi nhuan san pham:");
 					for (Categories categories : listC) {
 						for (Product product : listP) {
@@ -408,7 +428,11 @@ public class ShopManagement {
 				}
 				break;
 			case 3:
-				thongTinSanPham();
+				if(listP.size() <= 0){
+					System.out.println("Danh sach san pham rong");
+				}else {
+					thongTinSanPham();
+				}
 				break;
 			case 4:
 				if(listP.size() <= 0) {
@@ -543,7 +567,7 @@ public class ShopManagement {
 						for (Product product : listP) {
 							if(categories.getCatalogId() == product.getCatalog()) {
 								System.out.println("Danh muc: " + categories.getCatalogName());
-								product.displayData();
+								System.out.println("San pham: " + product.getProductName());
 							}
 						}
 					}
@@ -553,7 +577,7 @@ public class ShopManagement {
 				if(listP.size() <= 0) {
 					System.out.println("Danh sach san pham rong. Khong the tim kiem");
 				}else {
-					System.out.println("Nhap vao ten san pham can xem thong tin");
+					System.out.println("Nhap vao ten san pham can xem thong tin:");
 					while(true) {
 						String nameProduct = sc.nextLine();
 						boolean exsited = false;
@@ -589,6 +613,8 @@ public class ShopManagement {
 		int choice = 0;
 		
 		while(check) {
+			Locale localeVN = new Locale("vi", "VN");
+			NumberFormat vn = NumberFormat.getInstance(localeVN);
 			System.out.println("*********************SAP XEP SAN PHAM*********************");
 			System.out.println("1. Sap xep san pham theo gia ban tang dan"); //Done
 			System.out.println("2. Sap xep san pham theo loi nhuan giam dan"); //Done
@@ -612,7 +638,8 @@ public class ShopManagement {
 				
 				System.out.println("Thong tin san pham co gia ban tang dan:");
 				for (Product product : sortP) {
-					product.displayData();
+					System.out.println("Ma san pham " + product.getProductId() + " - Ten san pham: " + product.getProductName());
+					System.out.println("Gia ban: " + vn.format(product.getExportPrice()));
 				}
 				break;
 			case 2:
@@ -627,7 +654,8 @@ public class ShopManagement {
 				
 				System.out.println("Thong tin san pham co loi nhuan giam dan:");
 				for (Product product : sortP) {
-					product.displayData();
+					System.out.println("Ma san pham " + product.getProductId() + " - Ten san pham: " + product.getProductName());
+					product.calProfit();
 				}
 				break;
 

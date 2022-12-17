@@ -1,5 +1,7 @@
 package Javacore_BTL;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Product implements IProduct{
@@ -192,19 +194,23 @@ public class Product implements IProduct{
 
 	@Override
 	public void displayData() {
+		Locale localeVN = new Locale("vi", "VN");
+		NumberFormat vn = NumberFormat.getInstance(localeVN);
 		// TODO Auto-generated method stub
 		System.out.println("Ma san pham: " + productId + " - Ten san pham: " + productName);
 		System.out.println("Tieu de: " + title);
 		System.out.println("Mo ta: " + descriptions);
-		System.out.println("Gia nhap: " + this.getImportPrice() + " - Gia ban: " + this.getExportPrice());
+		System.out.println("Gia nhap: " + vn.format(importPrice) + " - Gia ban: " + vn.format(exportPrice));
 		System.out.println("Danh muc cha: " + catalog + " - Trang thai: " + (productStatus ? "Hoat dong":"Khong hoat dong"));
 	}
 
 	@Override
 	public void calProfit() {
+		Locale localeVN = new Locale("vi", "VN");
+		NumberFormat vn = NumberFormat.getInstance(localeVN);
 		// TODO Auto-generated method stub
 		profit = exportPrice - importPrice;
-		System.out.println("Loi nhuan san pham: " + profit);
+		System.out.println("Loi nhuan san pham: " +  vn.format(profit));
 	}
 	
 }
