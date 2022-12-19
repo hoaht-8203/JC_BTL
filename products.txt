@@ -1,0 +1,5 @@
+c001;iphone 11;dien thoai;1000000.0;2000000.0;1000000.0;abc;true;2
+c002;iphone 12;dien thoai;2000000.0;12000000.0;10000000.0;abc;true;2
+c003;iphone 13;dien thoai;3000000.0;21000000.0;18000000.0;abc;true;2
+c004;quan au;quan ao;200000.0;300000.0;100000.0;abc;true;1
+c005;ao so mi;quan ao;1200000.0;2000000.0;800000.0;abc;true;1

@@ -168,7 +168,7 @@ public class Product implements IProduct{
 			System.out.println("Nhap gia ban san pham:");
 			try {
 				exportPrice = Float.parseFloat(sc.nextLine());
-				if(exportPrice < (importPrice * MIN_INTEREST_RATE)) {
+				if(exportPrice <= ((importPrice * MIN_INTEREST_RATE) + importPrice)) {
 					System.out.println("Gia ban phai lon hon gia nhap " + MIN_INTEREST_RATE + " lan. Nhap lai:");
 				}else {
 					break;
@@ -211,6 +211,13 @@ public class Product implements IProduct{
 		// TODO Auto-generated method stub
 		profit = exportPrice - importPrice;
 		System.out.println("Loi nhuan san pham: " +  vn.format(profit));
+	}
+
+	@Override
+	public String toString() {
+		return productId + ";" + productName + ";" + title
+				+ ";" + importPrice + ";" + exportPrice + ";" + (exportPrice - importPrice)
+				+ ";" + descriptions + ";" + (productStatus ? true:false) + ";" + catalog;
 	}
 	
 }

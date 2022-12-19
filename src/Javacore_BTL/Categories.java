@@ -93,4 +93,12 @@ public class Categories implements ICategories{
 		System.out.println("Mo ta: " + descriptions);
 		System.out.println("Danh muc cha: " + parentId + " - Trang thai: " + (catalogStatus ? "Hoat dong":"Khong hoat dong"));
 	}
+
+	@Override
+	public String toString() {
+		return catalogId + ";" + catalogName + ";" + descriptions
+				+ ";" + (catalogStatus ? true:false) + ";" + parentId;
+	}
+	
+	
 }
