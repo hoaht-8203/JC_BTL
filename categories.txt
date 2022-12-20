@@ -1,10 +1,6 @@
-1;quan ao;abc;true;0
-2;dien thoai;abc;true;0
-3;may tinh;abc;true;0
-4;dien thoai apple;abc;true;2
-5;dien thoai samsung;abc;true;2
-6;dien thoai Bphone;abc;true;2
-7;quan ao nam;abc;true;1
-8;quan ao nu;abc;true;1
-9;may tinh choi game;abc;true;3
-10;may tinh lam viec;abc;true;3
+1;Dien thoai;abc;true;0
+2;Quan ao;abc;true;0
+3;Dien thoai apple;abc;true;1
+4;Dien thoai samsung;abc;true;1
+5;Quan ao nam;abc;true;2
+6;Quan ao nu;abc;true;2

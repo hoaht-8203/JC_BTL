@@ -1,5 +1,6 @@
 package Javacore_BTL;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -97,8 +98,7 @@ public class Categories implements ICategories{
 	@Override
 	public String toString() {
 		return catalogId + ";" + catalogName + ";" + descriptions
-				+ ";" + (catalogStatus ? true:false) + ";" + parentId;
+				+ ";" + catalogStatus + ";" + parentId;
 	}
-	
 	
 }
