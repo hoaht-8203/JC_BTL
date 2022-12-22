@@ -180,7 +180,8 @@ public class ShopManagement {
 							int cataId = Integer.parseInt(sc.nextLine());
 							List<Categories> cateFound = new ArrayList<Categories>();
 							List<Product> proFound = new ArrayList<Product>();
-							boolean existed = false;
+							boolean existedProduct = false;
+							boolean existedCate = false;
 							for (Categories categories : listC) {
 								if(categories.getCatalogId() == cataId) {
 									cateFound.add(categories);
@@ -189,31 +190,38 @@ public class ShopManagement {
 											cateFound.add(categories2);
 											for (Product product : listP) {
 												if(product.getCatalog() == categories2.getCatalogId()) {
-													proFound.add(product);
+													existedProduct = true;
+													break;
 												}
 											}
 											
 											for (Categories categories3 : listC) {
 												if(categories3.getParentId() == categories2.getCatalogId()) {
 													cateFound.add(categories3);
+													existedCate = true;
+													break;
 												}
 											}
+											existedCate = true;
 										}
 									}
 									
 									for (Product product : listP) {
 										if(product.getCatalog() == cataId) {
-											proFound.add(product);
+											existedProduct = true;
+											break;
 										}
 									}
-									existed = true;
+									existedCate = true;
 									break;
 								}
 							}
 							
-							if(cateFound != null && existed == true) {
+							if(existedProduct == true) {
+								System.out.println("Danh muc co san pham, khong the xoa. Nhap lai:");
+							}else if(cateFound != null && existedCate == true) {
+								
 								listC.removeAll(cateFound);
-								listP.removeAll(proFound);
 								System.out.println("Danh muc da duoc xoa");
 								
 								try {
