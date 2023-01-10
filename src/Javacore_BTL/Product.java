@@ -207,11 +207,8 @@ public class Product implements IProduct{
 
 	@Override
 	public void calProfit() {
-		Locale localeVN = new Locale("vi", "VN");
-		NumberFormat vn = NumberFormat.getInstance(localeVN);
 		// TODO Auto-generated method stub
 		profit = exportPrice - importPrice;
-		System.out.println("Loi nhuan san pham: " +  vn.format(profit));
 	}
 
 	@Override

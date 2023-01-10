@@ -1,10 +1,12 @@
-C001;iphone 13;dien thoai;2000000.0;1.2E7;1.0E7;abc;true;3
-C002;Iphone 11 pro;Dien thoai;2000000.0;8000000.0;6000000.0;abc;true;3
+C011;Iphone 14 pro;dien thoai;1.0E7;2.7E7;1.7E7;abc;true;3
+C001;Iphone 13;dien thoai;2000000.0;1.2E7;1.0E7;abc;true;3
 C003;Iphone 11 pro max;Dien thoai;3000000.0;1.2E7;9000000.0;abc;true;3
-C005;Samsung galaxy;Dien thoai;1000000.0;3000000.0;2000000.0;abc;true;4
 C006;Samsung Zfold;Dien thoai;4000000.0;1.3E7;9000000.0;abc;true;4
-C004;Ao so mi;Quan ao;100000.0;500000.0;400000.0;abc;true;5
+C002;Iphone 11 pro;Dien thoai;2000000.0;8000000.0;6000000.0;abc;true;3
+C012;iphone 6;dien thoai;2000000.0;7000000.0;5000000.0;abc;false;3
+C005;Samsung galaxy;Dien thoai;1000000.0;3000000.0;2000000.0;abc;true;4
 C007;Quan au;Quan ao;200000.0;900000.0;700000.0;abc;true;5
 C008;Ao dai;Quan ao;300000.0;900000.0;600000.0;abc;true;6
-C009;Quan ong rong;Quan ao;200000.0;600000.0;400000.0;abc;true;6
-c010;iphone 14;dien thoai;1.2E7;3.5E7;2.3E7;abc;false;3
+C004;Ao so mi;Quan ao;100000.0;500000.0;400000.0;abc;true;5
+C009;Quan kaki;quan ao;200000.0;620000.0;420000.0;abc;false;5
+C010;quan bo;quan ao;200000.0;600000.0;400000.0;abc;true;5

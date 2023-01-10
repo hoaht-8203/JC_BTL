@@ -17,11 +17,12 @@ import java.util.Scanner;
 
 
 public class ShopManagement {
-	//MAIN
+	
+	//Khai bao list
 	private static List<Categories> listC = new ArrayList<Categories>();
 	private static List<Product> listP = new ArrayList<Product>();
 	
-	
+	//Main
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int choice = 0;
@@ -179,7 +180,6 @@ public class ShopManagement {
 						try {
 							int cataId = Integer.parseInt(sc.nextLine());
 							List<Categories> cateFound = new ArrayList<Categories>();
-							List<Product> proFound = new ArrayList<Product>();
 							boolean existedProduct = false;
 							boolean existedCate = false;
 							for (Categories categories : listC) {
@@ -218,26 +218,14 @@ public class ShopManagement {
 							}
 							
 							if(existedProduct == true) {
-								System.out.println("Danh muc co san pham, khong the xoa. Nhap lai:");
+								System.out.println("Danh muc co san pham, khong the xoa.");
+								break;
 							}else if(cateFound != null && existedCate == true) {
 								
 								listC.removeAll(cateFound);
 								System.out.println("Danh muc da duoc xoa");
 								
-								try {
-									FileWriter fw = new FileWriter("categories.txt");
-									BufferedWriter bw = new BufferedWriter(fw);
-									
-									for (Categories categories : listC) {
-										bw.write(categories.toString());
-										bw.newLine();
-									}
-										
-									bw.close();
-									fw.close();
-								} catch (Exception e) {
-									// TODO: handle exception
-								}
+								updateCategoriesFile();
 								break;
 							}else {
 								System.out.println("Ma danh muc khong ton tai. Nhap lai:");
@@ -283,6 +271,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Danh sach danh muc
 	public static void danhSachDanhMuc() {
 		boolean check = true;
 		Scanner sc = new Scanner(System.in);
@@ -357,11 +346,6 @@ public class ShopManagement {
 							if(categories.getCatalogName().equalsIgnoreCase(name)) {
 								exsited = true;
 								categories.displayData();
-								for (Categories categories2 : listC) {
-									if(categories2.getParentId() == categories.getCatalogId()) {
-										categories2.displayData();
-									}
-								}
 								break;
 							}
 						}
@@ -416,8 +400,8 @@ public class ShopManagement {
 						System.out.println("Nhap ma san pham:");
 						String idProduct = sc.nextLine();
 						
-						if(idProduct.charAt(0) != 'C' && idProduct.charAt(0) != 'c') {
-							System.out.println("Ma san pham bat dau bang ky tu C hoac c. Nhap lai:");
+						if(idProduct.charAt(0) != 'C') {
+							System.out.println("Ma san pham bat dau bang ky tu C. Nhap lai:");
 						}else {
 							if(idProduct.length() != 4) {
 								System.out.println("Ma san phan phai co 4 ky tu. Nhap lai:");
@@ -496,16 +480,26 @@ public class ShopManagement {
 				if(listP.size() <= 0){
 					System.out.println("Danh sach san pham rong");
 				}else {
-					System.out.println("Thong tin loi nhuan san pham:");
-					for (Categories categories : listC) {
-						for (Product product : listP) {
-							if(categories.getCatalogId() == product.getCatalog()) {
-								System.out.println("Danh muc: " + categories.getCatalogName());
-								System.out.println("Ma san pham " + product.getProductId() + " - Ten san pham: " + product.getProductName());
-								product.calProfit();
-							}
+					Collections.sort(listP, new Comparator<Product>() {
+
+						@Override
+						public int compare(Product p1, Product p2) {
+							// TODO Auto-generated method stub
+							return p1.getProductId().compareTo(p2.getProductId());
 						}
+					});
+					
+					Locale localeVN = new Locale("vi", "VN");
+					NumberFormat vn = NumberFormat.getInstance(localeVN);
+					System.out.println("Thong tin loi nhuan san pham:");
+					System.out.printf("%-13s|%-20s|%-20s|%-15s\n", "Ma san pham", "Ten san pham", "Loi nhuan", "Trang thai");
+					System.out.println("-------------------------------------------------------------------------");
+					for (Product product : listP) {
+						product.calProfit();
+						System.out.printf("%-13s|%-20s|%-20s|%-15s\n", product.getProductId(), product.getProductName()
+								, vn.format(product.getProfit()), (product.getProductStatus() ?"Hoat dong":"Khong hoat dong"));
 					}
+					System.out.println("-------------------------------------------------------------------------");
 				}
 				break;
 			case 3:
@@ -584,19 +578,7 @@ public class ShopManagement {
 					
 					if(exsited) {
 						System.out.println("Da cap nhat thong tin cua san pham");
-						try {
-							FileWriter fw = new FileWriter("products.txt");
-							BufferedWriter bw = new BufferedWriter(fw);
-							for (Product product : listP) {
-								bw.write(product.toString());
-								bw.newLine();
-							}
-							
-							bw.close();
-							fw.close();
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
+						updateProductsFile();
 						break;
 					}else {
 						System.out.println("Ma san pham khong ton tai. Nhap lai:");
@@ -620,20 +602,7 @@ public class ShopManagement {
 					
 					if(existed) {
 						System.out.println("Da cap nhat trang thai cua san pham");
-						try {
-							FileWriter fw = new FileWriter("products.txt");
-							BufferedWriter bw = new BufferedWriter(fw);
-							
-							for (Product product : listP) {
-								bw.write(product.toString());
-								bw.newLine();
-							}
-							
-							bw.close();
-							fw.close();
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
+						updateProductsFile();
 						break;
 					}else {
 						System.out.println("Ma san pham khong ton tai. Nhap lai:");
@@ -650,6 +619,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Thong tin danh muc
 	public static void thongTinSanPham() {
 		boolean check = true;
 		Scanner sc = new Scanner(System.in);
@@ -674,11 +644,26 @@ public class ShopManagement {
 					System.out.println("Danh sach san pham rong");
 				}else {
 					boolean exsited = false;
+					int indexCate = 1;
+
 					for (Categories categories : listC) {
 						for (Product product : listP) {
 							if(categories.getCatalogId() == product.getCatalog()) {
 								exsited = true;
-								System.out.println("Danh muc: " + categories.getCatalogName() + " - San pham: " + product.getProductName());
+								break;
+							}
+						}
+						if(exsited) {
+							System.out.println("Danh muc "+ indexCate + ": " + categories.getCatalogName());
+							indexCate++;
+						}
+
+						int indexPro = 1;
+						for (Product product : listP) {
+							if(categories.getCatalogId() == product.getCatalog()) {
+								exsited = true;
+								System.out.println("\tSan pham " + indexPro + ": " + product.getProductName());
+								indexPro++;
 							}
 						}
 					}
@@ -692,11 +677,10 @@ public class ShopManagement {
 					while(true) {
 						String nameProduct = sc.nextLine();
 						boolean exsited = false;
+						System.out.println("Thong tin san pham:");
 						for (Product product : listP) {
-							if(product.getProductName().equalsIgnoreCase(nameProduct)) {
-								exsited = true;
+							if(product.getProductName().contains(nameProduct)) {
 								product.displayData();
-								break;
 							}
 						}
 						
@@ -718,6 +702,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Sap xep san pham
 	public static void sapXepSanPham() {
 		boolean check = true;
 		Scanner sc = new Scanner(System.in);
@@ -748,12 +733,17 @@ public class ShopManagement {
 				});
 				
 				System.out.println("Thong tin san pham co gia ban tang dan:");
+				System.out.printf("%-13s|%-20s|%-15s|%-10s\n", "Ma san pham", "Ten san pham", "Gia ban", "Trang thai");
+				System.out.println("-------------------------------------------------------------------------");
 				for (Product product : listP) {
-					System.out.println("Ma san pham " + product.getProductId() + " - Ten san pham: " + product.getProductName());
-					System.out.println("Gia ban: " + vn.format(product.getExportPrice()));
+					System.out.printf("%-13s|%-20s|%-15s|%-10s\n", product.getProductId(), product.getProductName(), vn.format(product.getExportPrice()), (product.getProductStatus() ? "Hoat dong":"Khong hoat dong"));
 				}
+				System.out.println("-------------------------------------------------------------------------");
 				break;
 			case 2:
+				for (Product product : listP) {
+					product.calProfit();
+				}
 				Collections.sort(listP, new Comparator<Product>() {
 
 					@Override
@@ -764,10 +754,12 @@ public class ShopManagement {
 				});
 				
 				System.out.println("Thong tin san pham co loi nhuan giam dan:");
+				System.out.printf("%-13s|%-20s|%-15s|%-10s\n", "Ma san pham", "Ten san pham", "Loi nhuan", "Trang thai");
+				System.out.println("-------------------------------------------------------------------------");
 				for (Product product : listP) {
-					System.out.println("Ma san pham " + product.getProductId() + " - Ten san pham: " + product.getProductName());
-					product.calProfit();
+					System.out.printf("%-13s|%-20s|%-15s|%-10s\n", product.getProductId(), product.getProductName(), vn.format(product.getProfit()), (product.getProductStatus() ? "Hoat dong":"Khong hoat dong"));
 				}
+				System.out.println("-------------------------------------------------------------------------");
 				break;
 
 			case 3:
@@ -782,6 +774,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Ghi file danh muc
 	public static void writeToFileCategories(Categories categories) {
 		try {
 			FileWriter fw = new FileWriter("categories.txt", true);
@@ -797,6 +790,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Ghi file san pham
 	public static void writeToFileProduct(Product product) {
 		try {
 			FileWriter fw = new FileWriter("products.txt", true);
@@ -812,6 +806,7 @@ public class ShopManagement {
 		}
 	}
 	
+	//Doc file danh muc
 	public List<Categories> readFromFileCategories(){
 		List<Categories> list = new ArrayList<Categories>();
 		try {
@@ -839,6 +834,7 @@ public class ShopManagement {
 		return list;
 	}
 	
+	//Doc file san pham
 	public List<Product> readFromFileProduct(){
 		List<Product> list = new ArrayList<Product>();
 		try {
@@ -871,11 +867,39 @@ public class ShopManagement {
 		return list;
 	}
 	
-	public static void updateProducts() {
-		
+	//Cap nhat file san pham sau khi sua
+	public static void updateProductsFile() {
+		try {
+			FileWriter fw = new FileWriter("products.txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			for (Product product : listP) {
+				bw.write(product.toString());
+				bw.newLine();
+			}
+			
+			bw.close();
+			fw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
-	public static void updateCategories() {
-		
+	//Cap nhat file danh muc sau khi xoa
+	public static void updateCategoriesFile() {
+		try {
+			FileWriter fw = new FileWriter("categories.txt");
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			for (Categories categories : listC) {
+				bw.write(categories.toString());
+				bw.newLine();
+			}
+				
+			bw.close();
+			fw.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 }
